@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Samsung Finance Calculator</title>
+<style>
+:root{
+  --bg:#f2f4f7;--card:#ffffff;--text:#101114;--muted:#68707c;--line:#e4e7ec;
+  --black:#090a0c;--soft:#f7f8fa;--green:#16833d;--green-soft:#edf9f1;
+  --shadow:0 6px 24px rgba(15,23,42,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#eef1f5 0,#f7f8fa 35%,#f2f4f7 100%);font-family:Arial,"Noto Sans Thai",sans-serif;color:var(--text)}
+.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:34px}
+.header{
+  background:linear-gradient(145deg,#050505,#191b1f);color:#fff;padding:24px 18px 20px;
+  position:sticky;top:0;z-index:5;box-shadow:0 4px 18px rgba(0,0,0,.22)
+}
+.brand{font-size:11px;letter-spacing:2px;opacity:.58;font-weight:700}
+.title{font-size:25px;font-weight:900;margin-top:6px;letter-spacing:-.4px}
+.sub{font-size:12px;opacity:.68;margin-top:5px}
+.section{padding:14px}
+.card{
+  background:var(--card);border-radius:20px;padding:17px;margin-bottom:12px;
+  box-shadow:var(--shadow);border:1px solid rgba(17,24,39,.035)
+}
+.label{font-size:13px;font-weight:800;margin-bottom:9px;display:block}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+select,input{
+  width:100%;height:50px;border:1px solid var(--line);border-radius:14px;background:#fff;
+  padding:0 14px;font-size:16px;outline:none;color:var(--text);transition:.18s
+}
+select:focus,input:focus{border-color:#111;box-shadow:0 0 0 3px rgba(17,24,39,.07)}
+.money{font-size:23px;font-weight:900;background:var(--soft)}
+.pillrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.down-grid{grid-template-columns:repeat(4,1fr)}
+.pill{
+  min-height:44px;border:1px solid var(--line);border-radius:13px;background:#fff;
+  padding:8px 3px;text-align:center;font-weight:800;font-size:14px;color:#30343a;
+  cursor:pointer;transition:transform .12s,background .12s,color .12s,border-color .12s;
+}
+.pill:active{transform:scale(.96)}
+.pill.active{background:var(--black);color:#fff;border-color:var(--black);box-shadow:0 4px 10px rgba(0,0,0,.16)}
+.discount{position:relative}
+.discount span{position:absolute;right:14px;top:16px;color:var(--muted);font-size:13px}
+.today{
+  background:var(--green-soft);border:1px solid #d6f0dd;border-radius:15px;padding:13px 14px;
+  margin-top:12px;color:#145c2f
+}
+.today b{display:block;font-size:23px;line-height:1.2;margin-top:2px}
+.result{
+  background:linear-gradient(145deg,#070809,#17191d);color:#fff;border-radius:22px;padding:19px;
+  margin:2px 14px 14px;box-shadow:0 10px 26px rgba(0,0,0,.18)
+}
+.result .eyebrow{font-size:11px;opacity:.55;letter-spacing:.5px}
+.big{font-size:35px;font-weight:950;letter-spacing:-.8px;margin-top:4px}
+.per{font-size:12px;opacity:.55;margin-top:1px}
+.rows{border-top:1px solid rgba(255,255,255,.13);margin-top:16px;padding-top:9px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px;color:rgba(255,255,255,.7)}
+.row strong{font-weight:850;color:#fff;text-align:right}
+.summary{padding:0 14px}
+.summary .card{padding:17px}
+.summary table{width:100%;border-collapse:collapse;font-size:13px}
+.summary td{padding:9px 0;border-bottom:1px solid var(--line)}
+.summary td:last-child{text-align:right;font-weight:800}
+.btn{
+  width:100%;height:49px;border:0;border-radius:14px;background:#111;color:#fff;
+  font-weight:850;font-size:14px;cursor:pointer;transition:.15s
+}
+.btn:active{transform:scale(.985)}
+.secondary{margin-top:8px;background:#fff;color:#111;border:1px solid var(--line)}
+.footer{text-align:center;color:#9ca3af;font-size:10px;padding:10px 0 24px}
+@media(max-width:360px){
+  .pill{font-size:13px}.big{font-size:31px}.title{font-size:23px}
+}
+@media(min-width:700px){
+  body{padding:20px}.app{border-radius:26px;overflow:hidden;box-shadow:0 12px 45px rgba(15,23,42,.18)}
+}
+@media print{
+  body{background:#fff}.header{position:static}.card,.result{box-shadow:none}
+  .btn,.footer{display:none!important}.app{max-width:none}.summary{padding:0 14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="brand">SAMSUNG FINANCE</div>
+  <div class="title">เครื่องคำนวณยอดผ่อน</div>
+  <div class="sub">Sales Tool • Mobile First</div>
+</header>
+
+<main>
+<section class="section">
+<div class="card">
+  <label class="label">1. เลือกรุ่น</label>
+  <select id="model"></select>
+  <div style="height:10px"></div>
+  <label class="label">ความจำ</label>
+  <select id="storage"></select>
+</div>
+
+<div class="card">
+  <label class="label">ราคาเต็ม</label>
+  <input id="price" class="readonly money" readonly>
+</div>
+
+<div class="card">
+  <label class="label">ส่วนลดทั้งหมด</label>
+  <div class="discount"><input id="discount" type="number" min="0" value="0" inputmode="numeric"><span>บาท</span></div>
+</div>
+
+<div class="card">
+  <label class="label">เงินดาวน์ <span style="color:#6b7280;font-weight:400">(คิดจากราคาเต็ม)</span></label>
+  <div class="pillrow down-grid" id="downRow">
+    <button class="pill active" data-v="0">0%</button>
+    <button class="pill" data-v="3">3%</button>
+    <button class="pill" data-v="5">5%</button>
+    <button class="pill" data-v="6">6%</button>
+    <button class="pill" data-v="7">7%</button>
+    <button class="pill" data-v="8">8%</button>
+    <button class="pill" data-v="9">9%</button>
+    <button class="pill" data-v="10">10%</button>
+    <button class="pill" data-v="15">15%</button>
+    <button class="pill" data-v="20">20%</button>
+    <button class="pill" data-v="30">30%</button>
+    <button class="pill" data-v="50">50%</button>
+  </div>
+  <div class="today">ชำระวันนี้: <b id="downAmount">0 บาท</b><div class="hint" style="color:#166534">เงินดาวน์ = ราคาเต็ม × % ดาวน์</div></div>
+</div>
+
+<div class="card">
+  <label class="label">จำนวนเดือนที่ผ่อน</label>
+  <div class="pillrow" id="termRow">
+    <button class="pill active" data-v="10">10 เดือน</button><button class="pill" data-v="12">12 เดือน</button>
+    <button class="pill" data-v="18">18 เดือน</button><button class="pill" data-v="24">24 เดือน</button>
+  </div>
+  <div class="hint">อัตราดอกเบี้ยที่ใช้คำนวณ: <b>0.87% ต่อเดือน</b></div>
+</div>
+</section>
+
+<div class="result">
+  <div class="eyebrow">ESTIMATED FINANCE PAYMENT</div>
+  <div class="big" id="monthly">0 บาท</div><div class="per">ต่อเดือน</div>
+  <div class="rows">
+    <div class="row"><span>ยอดจัดไฟแนนซ์</span><strong id="finance">0</strong></div>
+    <div class="row"><span>ดอกเบี้ยทั้งหมด</span><strong id="interest">0</strong></div>
+    <div class="row"><span>ยอดชำระรวมหลังจัด</span><strong id="total">0</strong></div>
+  </div>
+</div>
+
+<section class="summary">
+<div class="card" style="margin:0">
+  <label class="label">สรุปเคสสำหรับเสนอขาย</label>
+  <table>
+    <tr><td>รุ่น</td><td id="sModel">-</td></tr>
+    <tr><td>ความจำ</td><td id="sStorage">-</td></tr>
+    <tr><td>ราคาเต็ม</td><td id="sPrice">0</td></tr>
+    <tr><td>ส่วนลดทั้งหมด</td><td id="sDiscount">0</td></tr>
+    <tr><td>เงินดาวน์ / ชำระวันนี้</td><td id="sDown">0</td></tr>
+    <tr><td>ดอกเบี้ยทั้งหมด</td><td id="sInterest">0</td></tr>
+    <tr><td>ผ่อนต่อเดือน</td><td id="sMonthly">0</td></tr>
+    <tr><td>จำนวนเดือน</td><td id="sTerm">0</td></tr>
+  </table>
+  <button class="btn" style="margin-top:14px" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button>
+  <button class="btn secondary" onclick="resetAll()">เริ่มเคสใหม่</button>
+</div>
+</section>
+</main>
+<div class="footer">Samsung Finance Sales Tool • Interest 0.87% / month</div>
+</div>
+
+<script>
+const products = [
+["Galaxy S26 Ultra","1TB",66900],["Galaxy S26 Ultra","512GB",54900],["Galaxy S26 Ultra","256GB",46900],
+["Galaxy S26+","512GB",48900],["Galaxy S26+","256GB",40900],
+["Galaxy S26","512GB",41900],["Galaxy S26","256GB",33900],
+["Galaxy S25 Ultra","1TB",58900],["Galaxy S25 Ultra","512GB",48900],["Galaxy S25 Ultra","256GB",42900],
+["Galaxy S26 FE","256GB",28900],["Galaxy S26 FE","128GB",24900],
+["Galaxy S25 FE","256GB",26900],["Galaxy S25 FE","128GB",22900],
+["Galaxy Z Fold8 Ultra","16/1TB",93900],["Galaxy Z Fold8 Ultra","12/512GB",77900],["Galaxy Z Fold8 Ultra","12/256GB",69900],
+["Galaxy Z Fold8","16/1TB",85900],["Galaxy Z Fold8","12/512GB",69900],["Galaxy Z Fold8","12/256GB",61900],
+["Galaxy Z Flip8","12/512GB",50900],["Galaxy Z Flip8","12/256GB",42900],
+["Galaxy Z Fold7","1TB",87900],["Galaxy Z Fold7","512GB",75900],["Galaxy Z Fold7","256GB",67900],
+["Galaxy Z Flip7","512GB",48900],["Galaxy Z Flip7","256GB",40900],
+["Galaxy Z Flip7 FE","256GB",36900],["Galaxy Z Flip7 FE","128GB",32900],
+["Galaxy A57 5G","12/512",27999],["Galaxy A57 5G","12/256",22999],["Galaxy A57 5G","8/256",19999],["Galaxy A57 5G","8/128",17999],
+["Galaxy A37 5G","8/256",17999],["Galaxy A37 5G","8/128",15999],
+["Galaxy A27 5G","8/128",12999],["Galaxy A26 5G","256GB",10999],
+["Galaxy A17 5G","8/256",13999],["Galaxy A17 5G","8/128",10999],
+["Galaxy A17 LTE","8/128",9999],["Galaxy A17 LTE","4/128",7599],
+["Galaxy A08","4/128",7499],["Galaxy A07 5G","6/128",8999],["Galaxy A07s","4/64",5499],
+["Galaxy A07","6/128",7499],["Galaxy A07","4/128",6999],["Galaxy A07","4/64",5499],
+["Galaxy Tab S12 Ultra 5G","12/256",53900],["Galaxy Tab S12+ 5G","12/256",46900],["Galaxy Tab S12+ WiFi","12/256",41900],
+["Galaxy Tab S11 Ultra 5G","12/256",48900],["Galaxy Tab S11 (5G)","12/128",36900],["Galaxy Tab S11 (WiFi)","12/128",31900],
+["Galaxy Tab S10 FE+ 5G","12/256",30900],["Galaxy Tab S10 FE+ WiFi","12/256",27900],
+["Galaxy Tab S10 FE 5G","8/128",22900],["Galaxy Tab S10 FE WiFi","8/128",19900],
+["Galaxy Tab S10 Lite 5G","6/128",16990],["Galaxy Tab S10 Lite WiFi","6/128",12990],
+["Galaxy Tab A11+ 5G","6/128",10490],["Galaxy Tab A11+ WiFi","6/128",8490],["Galaxy Tab A11 LTE","8/128",7490]
+];
+
+const model=document.getElementById("model"), storage=document.getElementById("storage"), price=document.getElementById("price"), discount=document.getElementById("discount");
+let downPct=0, term=10;
+const money=n=>Number(n||0).toLocaleString("th-TH",{maximumFractionDigits:2});
+const models=[...new Set(products.map(x=>x[0]))];
+
+function fillModels(){
+  model.innerHTML=models.map(m=>`<option>${m}</option>`).join("");
+  fillStorage();
+}
+function fillStorage(){
+  const rows=products.filter(x=>x[0]===model.value);
+  storage.innerHTML=rows.map(x=>`<option value="${x[1]}">${x[1]}</option>`).join("");
+  calc();
+}
+function getRow(){return products.find(x=>x[0]===model.value && x[1]===storage.value)}
+function calc(){
+  const p=getRow()?.[2]||0, d=Math.max(0,Number(discount.value)||0);
+  const down=p*downPct/100;
+  const finance=Math.max(0,p-d-down);
+  const interest=finance*0.0087*term;
+  const total=finance+interest;
+  const monthly=term?total/term:0;
+  price.value=money(p);
+  document.getElementById("downAmount").textContent=money(down)+" บาท";
+  document.getElementById("finance").textContent=money(finance)+" บาท";
+  document.getElementById("interest").textContent=money(interest)+" บาท";
+  document.getElementById("total").textContent=money(total)+" บาท";
+  document.getElementById("monthly").textContent=money(monthly)+" บาท";
+  document.getElementById("sModel").textContent=model.value;
+  document.getElementById("sStorage").textContent=storage.value;
+  document.getElementById("sPrice").textContent=money(p)+" บาท";
+  document.getElementById("sDiscount").textContent=money(d)+" บาท";
+  document.getElementById("sDown").textContent=money(down)+" บาท";
+  document.getElementById("sInterest").textContent=money(interest)+" บาท";
+  document.getElementById("sMonthly").textContent=money(monthly)+" บาท";
+  document.getElementById("sTerm").textContent=term+" เดือน";
+}
+model.addEventListener("change",fillStorage); storage.addEventListener("change",calc); discount.addEventListener("input",calc);
+document.querySelectorAll("#downRow .pill").forEach(b=>b.onclick=()=>{document.querySelectorAll("#downRow .pill").forEach(x=>x.classList.remove("active"));b.classList.add("active");downPct=Number(b.dataset.v);calc()});
+document.querySelectorAll("#termRow .pill").forEach(b=>b.onclick=()=>{document.querySelectorAll("#termRow .pill").forEach(x=>x.classList.remove("active"));b.classList.add("active");term=Number(b.dataset.v);calc()});
+function resetAll(){discount.value=0;downPct=0;term=10;document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));document.querySelector("#downRow .pill").classList.add("active");document.querySelector("#termRow .pill").classList.add("active");fillModels()}
+fillModels();
+</script>
+</body>
+</html>
