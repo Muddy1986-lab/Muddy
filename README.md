@@ -1,13 +1,41 @@
-# Muddy_SF_Mobile_First
+# ปริญญา นาผืนน้อย & หนูดีฟาร์ม — เครื่องคำนวณฟาร์มเป็ดไข่
 
-Samsung Finance mobile-first calculator.
+เว็บไซต์คำนวณต้นทุนเริ่มแรก ค่าอาหารและการดูแล รายได้จากไข่ รายได้สุทธิ และระยะเวลาคืนทุนเบื้องต้น
 
-## GitHub Pages
+## ไฟล์ทั้งหมดในโปรเจกต์
 
-1. Upload `index.html` to the root of the repository.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select branch `main` and folder `/ (root)`.
-5. Save, then open the published Pages URL.
+- `index.html` — เว็บไซต์หลักสำหรับ GitHub Pages (รวม HTML, CSS, JavaScript และภาพแบนเนอร์ที่ฝังในหน้าเว็บแล้ว)
+- `duck-farm-calculator.html` — สำเนาเว็บไซต์สำหรับเปิดใช้งานนอก GitHub หรือเก็บเป็นไฟล์สำรอง
+- `assets/farm-brand-banner.jpg` — ภาพแบนเนอร์แบรนด์ฉบับ JPG
+- `assets/farm-brand-banner-original.png` — ภาพแบนเนอร์ต้นฉบับฉบับ PNG
+- `README.md` — คู่มือโปรเจกต์และการเผยแพร่
+- `.gitignore` — ไฟล์ที่ไม่ต้องการให้ Git ติดตาม
 
-The `.nojekyll` file is included so GitHub Pages serves the static files directly.
+เว็บไซต์เป็นไฟล์ HTML แบบ standalone จึงไม่ต้องติดตั้ง dependencies และไม่ต้องใช้เซิร์ฟเวอร์ภายนอก
+
+## วิธีเปิดใช้งานในเครื่อง
+
+เปิด `index.html` หรือ `duck-farm-calculator.html` ด้วยเว็บเบราว์เซอร์ได้ทันที
+
+## วิธีเผยแพร่ด้วย GitHub Pages
+
+1. สร้าง Repository ใหม่ที่ https://github.com/new
+2. อัปโหลดไฟล์และโฟลเดอร์ทั้งหมดในชุดนี้ไปไว้ที่ root ของ Repository โดยให้ `index.html` อยู่ระดับบนสุด
+3. เข้า **Settings → Pages**
+4. ใน **Build and deployment** เลือก **Deploy from a branch**
+5. เลือก branch `main` และโฟลเดอร์ `/ (root)` แล้วกด **Save**
+6. รอ GitHub Pages เผยแพร่ จากนั้นเปิด URL ที่แสดงในหน้า Pages
+
+## สมมติฐานที่ใช้ในการคำนวณ
+
+- อาหาร 1 กระสอบ = 30 กิโลกรัม
+- อาหารเป็ดเฉลี่ย 135 กรัมต่อตัวต่อวัน
+- พื้นที่โรงเรือน 4 ตัวต่อ 1 ตารางวา
+- 1 แผงไข่ = 30 ฟอง
+- คิดเดือนละ 30 วัน
+- ค่ายา/วิตามิน = จำนวนเป็ด × 0.50 บาทต่อเดือน (ตัวอย่าง 500 ตัว = 250 บาท/เดือน)
+- ระยะเวลาคืนทุนเป็นการประเมินเบื้องต้น และไม่รวมค่าโรงเรือน อุปกรณ์ ค่าแรง ค่าน้ำไฟ หรือค่าใช้จ่ายอื่นที่ไม่ได้กรอก
+
+## หมายเหตุ
+
+ภาพแบนเนอร์ถูกฝังไว้ใน HTML แล้ว ดังนั้นหน้าเว็บยังแสดงแบนเนอร์ได้แม้ไม่ได้โหลดไฟล์จาก `assets/` โฟลเดอร์ `assets/` เก็บภาพแยกไว้สำหรับแก้ไขหรือใช้ต่อในอนาคต
